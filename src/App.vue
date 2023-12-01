@@ -12,7 +12,7 @@ import LinkingTool from './components/LinkingTool.vue';
     </div>
   </header>
 
-  <main class="bg-white">
+  <main class="">
 <LinkingTool />
   </main>
 </template>
