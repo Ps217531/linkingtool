@@ -9,7 +9,4 @@ import LinkingTool from './components/LinkingTool.vue';
 </template>
 
 <style scoped>
-#app {
-  background-color: white;
-}
 </style>
