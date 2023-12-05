@@ -5,32 +5,41 @@
 
             <div class="mb-4">
                 <label for="website" class="block text-sm font-medium text-gray-700 mb-2">Website URL:</label>
-                <input v-model="website" @input="generateLink" placeholder="Website URL" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+                <input v-model="website" @input="generateLink" placeholder="Website URL"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4">
                 <label for="campaignId" class="block text-sm font-medium text-gray-700 mb-2">Campaign ID:</label>
-                <input v-model="campaignId" @input="generateLink" placeholder="Campaign ID" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+                <input v-model="campaignId" @input="generateLink" placeholder="Campaign ID"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4">
                 <label for="campaignSource" class="block text-sm font-medium text-gray-700 mb-2">Campaign Source:</label>
-                <input v-model="campaignSource" @input="generateLink" placeholder="Campaign Source" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+                <input v-model="campaignSource" @input="generateLink" placeholder="Campaign Source"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4">
                 <label for="campaignMedium" class="block text-sm font-medium text-gray-700 mb-2">Campaign Medium:</label>
-                <input v-model="campaignMedium" @input="generateLink" placeholder="Campaign Medium" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+                <input v-model="campaignMedium" @input="generateLink" placeholder="Campaign Medium"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4">
                 <label for="campaignName" class="block text-sm font-medium text-gray-700 mb-2">Campaign Name:</label>
-                <input v-model="campaignName" @input="generateLink" placeholder="Campaign Name" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+                <input v-model="campaignName" @input="generateLink" placeholder="Campaign Name"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
-            <div id="generatedLink" class="mt-6 text-sm text-gray-700 break-words cursor-copy" @click="copyLink">{{ generatedLink }}</div>
-            <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none  focus:border-blue-300" :class="{ 'bg-green-500 hover:bg-green-600': copied }" @click="copyLink">{{ copied ? "Copied" : "Copy" }}</button>
-            
+            <div id="generatedLink" class="mt-6 text-sm text-gray-700 break-words cursor-copy" @click="copyLink">{{
+                generatedLink }}</div>
+            <button
+                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none  focus:border-blue-300"
+                :class="{ 'bg-green-500 hover:bg-green-600': copied }" @click="copyLink">{{ copied ? "Copied" : "Copy"
+                }}</button>
+
         </div>
     </div>
 </template>
@@ -54,20 +63,23 @@ export default {
             this.generatedLink = `${this.website}?utm_source=${this.campaignSource.replace(/\s/g, '+')}&utm_medium=${this.campaignMedium.replace(/\s/g, '+')}&utm_campaign=${this.campaignName.replace(/\s/g, '+')}&utm_id=${this.campaignId.replace(/\s/g, '+')}`;
         },
         copyLink() {
-            navigator.clipboard.writeText(this.generatedLink)
-                .then(() => {
-                    this.copied = true;
-                    setTimeout(() => {
-                        this.copied = false;
-                    }, 3000); // Hide after 3 seconds
-                })
-                .catch((error) => {
-                    console.error('Failed to copy link:', error);
-                });
+            const textarea = document.createElement('textarea');
+            textarea.value = this.generatedLink;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                this.copied = true;
+                setTimeout(() => {
+                    this.copied = false;
+                }, 3000); // Hide after 3 seconds
+            } catch (error) {
+                console.error('Failed to copy link:', error);
+            }
+            document.body.removeChild(textarea);
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
