@@ -37,8 +37,8 @@
                 generatedLink }}</div>
             <button
                 class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none  focus:border-blue-300"
-                :class="{ 'bg-green-500 hover:bg-green-600': copied }" @click="copyLink">{{ copied ? "Copied" : "Copy"
-                }}</button>
+                :class="{ 'bg-green-500 hover:bg-green-600': copied }" @click="copyLink">{{ copied ? "Copied" : "Copy"}}
+            </button>
 
         </div>
     </div>
@@ -55,7 +55,7 @@ export default {
             campaignMedium: '',
             campaignName: '',
             generatedLink: '',
-            copied: false
+            copied: false //  default is false, after copy is true
         };
     },
     methods: {
@@ -63,7 +63,20 @@ export default {
             this.generatedLink = `${this.website}?utm_source=${this.campaignSource.replace(/\s/g, '+')}&utm_medium=${this.campaignMedium.replace(/\s/g, '+')}&utm_campaign=${this.campaignName.replace(/\s/g, '+')}&utm_id=${this.campaignId.replace(/\s/g, '+')}`;
         },
         copyLink() {
-            const textarea = document.createElement('textarea');
+    if (navigator.clipboard) {//for browser supports clipboard api
+        navigator.clipboard.writeText(this.generatedLink)
+            .then(() => {
+                this.copied = true;
+                setTimeout(() => {
+                    this.copied = false;
+                }, 3000); // Hide after 3 seconds
+            })
+            .catch((error) => {
+                console.error('Failed to copy link:', error);
+            });
+    } else {
+        // for older browsers
+        const textarea = document.createElement('textarea');
             textarea.value = this.generatedLink;
             document.body.appendChild(textarea);
             textarea.select();
@@ -77,7 +90,9 @@ export default {
                 console.error('Failed to copy link:', error);
             }
             document.body.removeChild(textarea);
-        }
+    }
+}
+
     }
 }
 </script>
