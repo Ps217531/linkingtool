@@ -28,7 +28,9 @@
                 <input v-model="campaignName" @input="generateLink" placeholder="Campaign Name" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
-            <div id="generatedLink" class="mt-6 text-sm text-gray-700 break-words" @click="copyLink">{{ generatedLink }}</div>
+            <div id="generatedLink" class="mt-6 text-sm text-gray-700 break-words cursor-copy" @click="copyLink">{{ generatedLink }}</div>
+            <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none  focus:border-blue-300" :class="{ 'bg-green-500 hover:bg-green-600': copied }" @click="copyLink">{{ copied ? "Copied" : "Copy" }}</button>
+            
         </div>
     </div>
 </template>
@@ -43,7 +45,8 @@ export default {
             campaignSource: '',
             campaignMedium: '',
             campaignName: '',
-            generatedLink: ''
+            generatedLink: '',
+            copied: false
         };
     },
     methods: {
@@ -53,7 +56,10 @@ export default {
         copyLink() {
             navigator.clipboard.writeText(this.generatedLink)
                 .then(() => {
-                    alert('Link copied to clipboard!');
+                    this.copied = true;
+                    setTimeout(() => {
+                        this.copied = false;
+                    }, 3000); // Hide after 3 seconds
                 })
                 .catch((error) => {
                     console.error('Failed to copy link:', error);
